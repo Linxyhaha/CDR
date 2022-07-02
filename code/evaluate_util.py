@@ -2,39 +2,6 @@ import numpy as np
 import torch
 import math
 import time
-
-
-def pre_ranking(user_feature, item_feature, train_dict, valid_dict, test_dict):
-    '''prepare for the ranking: construct input data'''
-
-    user_rank_feature = {}
-    for userID in test_dict:
-        his_items = train_dict[userID]
-        features = []
-        feature_values = []
-        mask = []
-        item_idx = list(item_feature.keys())
-        for idx in range(len(item_idx)):
-            itemID = item_idx[idx]
-            if itemID in his_items: # set as -inf if it's in training set
-                mask.append(-999.0)
-            else:
-                mask.append(0.0)
-            features.append(np.array(user_feature[userID][0]+item_feature[itemID][0]))
-            feature_values.append(np.array(user_feature[userID][1]+item_feature[itemID][1], dtype=np.float32))
-            
-        features = torch.tensor(features).cuda()
-        feature_values = torch.tensor(feature_values).cuda()
-        mask = torch.tensor(mask).cuda()
-        user_rank_feature[userID] = [features, feature_values, mask]
-    
-    return user_rank_feature
- 
-
-def sigmoid(x):
-    s = 1 / (1 + np.exp(-x))
-    return s
-    
     
 def computeTopNAccuracy(GroundTruth, predictedIndices, topN):
     precision = [] 

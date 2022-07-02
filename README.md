@@ -14,11 +14,11 @@ The experimental data are in './data' folder, including Yelp, Book and Electroni
 
 ### Training
 ```
-python main.py --dataset=$1 --lr=$2 --wd=$3 --batch_size=$4 --epochs=$5 --mlp_dims=$6 --mlp_p1_dims=$7 --mlp_p2_dims=$8 --a_dims=$9 --z_dims=$10 --c_dims=$11 --tau=$12 --T=$13 --sigma=$14 --total_anneal_steps=$15 --anneal_cap=$16 --bn=$17 --dropout=$18 --regs=$19 --lam1=$20 --lam2=$21 --std=$22 --w_sigma=$23 --cuda --add_T=$24 --log_name=$25 --gpu=$26
+python main.py --dataset=$1 --lr=$2 --batch_size=$3 --mlp_dims=$4 --mlp_p1_dims=$5 --mlp_p2_dims=$6 --a_dims=$7 --z_dims=$8 --c_dims=$9 --tau=$10 --T=$11 --lam1=$12 --lam2=$13 --lam3=$14 --regs=$15 --bn=$16 --dropout=$17 --std=$18 --add_T=$19 --log_name=$20 --gpu=$21 --cuda
 ```
 or use run.sh
 ```
-sh run.sh model_name dataset lr wd batch_size epochs mlp_dims mlp_p1_dims mlp_p2_dims a_dims z_dims c_dims tau T sigma total_anneal_steps anneal_cap bn dropout regs lam1 lam2 std w_sigma add_T log_name gpu_id
+sh run.sh model_name dataset lr batch_size mlp_dims mlp_p1_dims mlp_p2_dims a_dims z_dims c_dims tau T lam1 lam2 lam3 regs bn dropout std add_T log_name gpu_id
 ```
 - The log file will be in the './code/log/' folder. 
 - The explanation of hyper-parameters can be found in './code/main.py'. 
@@ -27,7 +27,7 @@ sh run.sh model_name dataset lr wd batch_size epochs mlp_dims mlp_p1_dims mlp_p2
 ### Inference
 Get the results of CDR over three datasets by running inference.py:
 ```
-python inference.py --dataset=$1 --ckpt=$2 --cuda
+python inference.py --dataset=$1 --T=$2 --add_T=$3 --ckpt=$4 --gpu=$5 --cuda
 ```
 ### Examples
 
@@ -35,12 +35,12 @@ python inference.py --dataset=$1 --ckpt=$2 --cuda
 
 ```
 cd ./code
-sh run.sh yelp 1e-3 0 500 [800] [] [] 400 400 2 0.5 3 0.1 0 0.5 1 0.6 0 0.0001 1 1 0.5 2 log 0
+sh run.sh yelp 1e-4 500 [800] [] [] 400 400 2 0.5 3 0.5 1 0.0001 0 1 0.6 1 2 log 0
 ```
 
 2. Inference on Book:
 
 ```
 cd ./code
-python inference.py --dataset book --ckpt <pre-trained model directory> --cuda
+python inference.py --dataset book --T 3 --add_T 3 --ckpt <pre-trained model directory> --gpu 0 --cuda
 ```
